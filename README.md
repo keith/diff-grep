@@ -3,11 +3,12 @@
 `diff-grep` is a tool for filtering diffs to only include the hunks
 matching the given patterns.
 
-## Example use
+## Usage
+
+Produce a diff, for example using `git diff`:
 
 ```sh
 $ git diff ... > /tmp/original.diff
-
 $ cat /tmp/original.diff
 diff --git c/docs/ld.1.html w/docs/ld.1.html
 index 2ac7626c..eeb7bdc5 100644
@@ -40,9 +41,13 @@ index 2ac7626c..eeb7bdc5 100644
      <td class="foot-os">Darwin</td>
    </tr>
  </table>
+```
 
+Filter the diff where every line in a hunk must match the given
+pattern(s):
+
+```sh
 $ cat /tmp/original.diff | diff-grep foot-date --output /tmp/filtered.diff
-
 $ cat /tmp/filtered.diff
 --- c/docs/ld.1.html
 +++ w/docs/ld.1.html
@@ -55,7 +60,12 @@ $ cat /tmp/filtered.diff
      <td class="foot-os">Darwin</td>
    </tr>
  </table>
+```
 
+Use the new diff somewhere, in this example we revert the matching
+hunks:
+
+```sh
 $ git apply --reverse /tmp/filtered.diff
 ```
 
