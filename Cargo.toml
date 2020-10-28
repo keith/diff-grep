@@ -1,5 +1,5 @@
 [package]
-name = "diff-parse"
+name = "diff-grep"
 version = "0.1.0"
 authors = ["Keith Smiley <keithbsmiley@gmail.com>"]
 edition = "2018"

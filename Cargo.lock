@@ -71,7 +71,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "diff-parse"
+name = "diff-grep"
 version = "0.1.0"
 dependencies = [
  "clap",
