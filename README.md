@@ -63,3 +63,9 @@ In this example we filter out noise from a diff, and the revert only
 that hunk using `git apply --reverse`. This can be useful when you want
 to stage, or checkout, large mechanical diffs that you have intertwined
 other changes in.
+
+## Installation
+
+```sh
+cargo install --path .
+```
