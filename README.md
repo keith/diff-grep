@@ -7,7 +7,7 @@ matching the given patterns.
 
 Produce a diff, for example using `git diff`:
 
-```sh
+```
 $ git diff ... > /tmp/original.diff
 $ cat /tmp/original.diff
 diff --git c/docs/ld.1.html w/docs/ld.1.html
