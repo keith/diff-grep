@@ -1,5 +1,3 @@
-extern crate unidiff;
-
 pub fn read(path: &String) -> Result<String, String> {
     let mut handle: Box<dyn std::io::Read> = if path == "-" {
         Box::new(std::io::stdin())
@@ -15,7 +13,7 @@ pub fn read(path: &String) -> Result<String, String> {
     Ok(buffer)
 }
 
-pub fn write(path: String, files: Vec<unidiff::PatchedFile>) -> Result<(), String> {
+pub fn write<T: std::fmt::Display>(path: String, files: Vec<T>) -> Result<(), String> {
     if files.is_empty() {
         return Ok(());
     }

@@ -1,5 +1,6 @@
-extern crate unidiff;
+extern crate patch;
 
+mod files;
 mod io;
 mod lines;
 mod opts;
@@ -14,30 +15,27 @@ fn main() {
         }
     };
 
-    let mut patch_set = unidiff::PatchSet::new();
-    match patch_set.parse(diff_str) {
-        Ok(()) => (),
-        Err(_) => {
-            eprintln!("error: failed to parse diff from {}", &options.input);
-            std::process::exit(1)
-        }
-    };
+    let patches = patch::Patch::from_multiple(&diff_str).unwrap_or_else(|_| {
+        eprintln!("error: failed to parse diff from {}", &options.input);
+        std::process::exit(1)
+    });
 
-    let mut files = vec![];
-    for patched_file in patch_set {
+    let mut files: Vec<patch::Patch> = vec![];
+    for patched_file in patches {
         let mut hunks_per_file = vec![];
-        for hunk in patched_file.clone() {
-            if lines::only_contains_ignored_patterns(hunk.clone(), &options.patterns) {
+        for hunk in patched_file.hunks {
+            if lines::only_contains_matching_lines(hunk.clone(), &options.patterns) {
                 hunks_per_file.push(hunk)
             }
         }
 
         if !hunks_per_file.is_empty() {
-            files.push(unidiff::PatchedFile::with_hunks(
-                patched_file.source_file,
-                patched_file.target_file,
-                hunks_per_file,
-            ));
+            files.push(patch::Patch {
+                old: files::get_file(patched_file.old),
+                new: files::get_file(patched_file.new),
+                hunks: hunks_per_file,
+                end_newline: patched_file.end_newline,
+            });
         }
     }
 
