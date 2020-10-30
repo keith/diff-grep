@@ -7,7 +7,7 @@ matching the given patterns.
 
 Produce a diff, for example using `git diff`:
 
-```
+```diff
 $ git diff ... > /tmp/original.diff
 $ cat /tmp/original.diff
 diff --git c/docs/ld.1.html w/docs/ld.1.html
@@ -46,7 +46,7 @@ index 2ac7626c..eeb7bdc5 100644
 Filter the diff where every line in a hunk must match the given
 pattern(s):
 
-```sh
+```diff
 $ cat /tmp/original.diff | diff-grep foot-date --output /tmp/filtered.diff
 $ cat /tmp/filtered.diff
 --- c/docs/ld.1.html
@@ -69,7 +69,7 @@ hunks:
 $ git apply --reverse /tmp/filtered.diff
 ```
 
-In this example we filter out noise from a diff, and the revert only
+In this example, we filter out noise from a diff, and the revert only
 that hunk using `git apply --reverse`. This can be useful when you want
 to stage, or checkout, large mechanical diffs that you have intertwined
 other changes in.
