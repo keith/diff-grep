@@ -62,17 +62,15 @@ $ cat /tmp/filtered.diff
  </table>
 ```
 
-Use the new diff somewhere, in this example we revert the matching
-hunks:
+Use the filtered diff somewhere:
 
 ```sh
 $ git apply --reverse /tmp/filtered.diff
 ```
 
-In this example, we filter out noise from a diff, and the revert only
-that hunk using `git apply --reverse`. This can be useful when you want
-to stage, or checkout, large mechanical diffs that you have intertwined
-other changes in.
+In this example, we revert only the matching hunk using `git apply
+--reverse`. This can be useful when you want to stage, or checkout,
+large mechanical diffs that you have intertwined other changes with.
 
 ## Installation
 
