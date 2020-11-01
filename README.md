@@ -43,7 +43,7 @@ index 2ac7626c..eeb7bdc5 100644
  </table>
 ```
 
-Filter the diff where every line in a hunk must match the given
+Filter the diff where every modified line in a hunk must match the given
 pattern(s):
 
 ```diff
