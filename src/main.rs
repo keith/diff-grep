@@ -24,7 +24,7 @@ fn main() {
     for patched_file in patches {
         let mut hunks_per_file = vec![];
         for hunk in patched_file.hunks {
-            if lines::only_contains_matching_lines(hunk.clone(), &options.patterns) {
+            if lines::only_contains_matching_lines(&hunk, &options.patterns) {
                 hunks_per_file.push(hunk)
             }
         }

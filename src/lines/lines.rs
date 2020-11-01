@@ -1,7 +1,7 @@
 extern crate patch;
 
-pub fn only_contains_matching_lines(hunk: patch::Hunk, patterns: &Vec<String>) -> bool {
-    for line in hunk.lines {
+pub fn only_contains_matching_lines(hunk: &patch::Hunk, patterns: &Vec<String>) -> bool {
+    for line in &hunk.lines {
         match line {
             patch::Line::Add(text) | patch::Line::Remove(text) => {
                 if !patterns.iter().any(|p| text.contains(p)) {
@@ -71,7 +71,7 @@ index e86bee4d..dd169e50 100644
     #[test]
     fn test_no_match() {
         assert_eq!(
-            only_contains_matching_lines(test_hunk(), &vec!["bar".to_string()]),
+            only_contains_matching_lines(&test_hunk(), &vec!["bar".to_string()]),
             false
         );
     }
@@ -79,7 +79,7 @@ index e86bee4d..dd169e50 100644
     #[test]
     fn test_match() {
         assert_eq!(
-            only_contains_matching_lines(test_hunk(), &vec!["foot-date".to_string()]),
+            only_contains_matching_lines(&test_hunk(), &vec!["foot-date".to_string()]),
             true
         );
     }
@@ -88,7 +88,7 @@ index e86bee4d..dd169e50 100644
     fn test_single_match() {
         assert_eq!(
             only_contains_matching_lines(
-                test_hunk(),
+                &test_hunk(),
                 &vec!["bar".to_string(), "foot-date".to_string()]
             ),
             true
@@ -99,7 +99,7 @@ index e86bee4d..dd169e50 100644
     fn test_detatched_no_match() {
         assert_eq!(
             only_contains_matching_lines(
-                test_detatched_hunk(),
+                &test_detatched_hunk(),
                 &vec!["bar".to_string(), "foot-date".to_string()]
             ),
             false
@@ -110,7 +110,7 @@ index e86bee4d..dd169e50 100644
     fn test_detatched_match() {
         assert_eq!(
             only_contains_matching_lines(
-                test_detatched_hunk(),
+                &test_detatched_hunk(),
                 &vec!["bar".to_string(), "foo".to_string()]
             ),
             true
