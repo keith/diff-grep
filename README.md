@@ -74,6 +74,14 @@ large mechanical diffs that you have intertwined other changes with.
 
 ## Installation
 
+[Homebrew](https://brew.sh):
+
 ```sh
-cargo install --path .
+brew install keith/formulae/diff-grep
+```
+
+Manually, after [installing rust](https://rustup.rs/):
+
+```sh
+cargo install --locked --path .
 ```
