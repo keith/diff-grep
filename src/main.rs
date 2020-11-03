@@ -2,7 +2,7 @@ extern crate patch;
 
 mod files;
 mod io;
-mod lines;
+mod matcher;
 mod opts;
 
 fn main() {
@@ -20,11 +20,19 @@ fn main() {
         std::process::exit(1)
     });
 
+    let matcher = match matcher::regex_matcher::RegexMatcher::new(&options.patterns) {
+        Ok(matcher) => matcher,
+        Err(err) => {
+            eprintln!("error: {}", err);
+            std::process::exit(1)
+        }
+    };
+
     let mut files: Vec<patch::Patch> = vec![];
     for patched_file in patches {
         let mut hunks_per_file = vec![];
         for hunk in patched_file.hunks {
-            if lines::only_contains_matching_lines(&hunk, &options.patterns) {
+            if matcher::lines::only_contains_matching_lines(&hunk, &matcher) {
                 hunks_per_file.push(hunk)
             }
         }

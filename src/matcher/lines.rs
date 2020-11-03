@@ -1,10 +1,12 @@
 extern crate patch;
 
-pub fn only_contains_matching_lines(hunk: &patch::Hunk, patterns: &Vec<String>) -> bool {
+use super::matcher;
+
+pub fn only_contains_matching_lines(hunk: &patch::Hunk, matcher: &dyn matcher::Matcher) -> bool {
     for line in &hunk.lines {
         match line {
             patch::Line::Add(text) | patch::Line::Remove(text) => {
-                if !patterns.iter().any(|p| text.contains(p)) {
+                if !matcher.matches(text.to_string()) {
                     return false;
                 }
             }
@@ -17,7 +19,7 @@ pub fn only_contains_matching_lines(hunk: &patch::Hunk, patterns: &Vec<String>) 
 
 #[cfg(test)]
 mod tests {
-    // Note this useful idiom: importing names from outer (for mod tests) scope.
+    use super::super::regex_matcher;
     use super::*;
 
     fn test_hunk() -> patch::Hunk<'static> {
@@ -70,16 +72,29 @@ index e86bee4d..dd169e50 100644
 
     #[test]
     fn test_no_match() {
-        assert_eq!(
-            only_contains_matching_lines(&test_hunk(), &vec!["bar".to_string()]),
-            false
-        );
+        assert_eq!(match_helper(&test_hunk(), &vec!["bar".to_string()]), false);
     }
 
     #[test]
     fn test_match() {
         assert_eq!(
-            only_contains_matching_lines(&test_hunk(), &vec!["foot-date".to_string()]),
+            match_helper(&test_hunk(), &vec!["foot-date".to_string()]),
+            true
+        );
+    }
+
+    #[test]
+    fn test_regex_match() {
+        assert_eq!(
+            match_helper(&test_hunk(), &vec!["f[o]+t-date".to_string()]),
+            true
+        );
+    }
+
+    #[test]
+    fn test_entire_regex_match() {
+        assert_eq!(
+            match_helper(&test_hunk(), &vec![r"[\w-]+".to_string()]),
             true
         );
     }
@@ -87,7 +102,7 @@ index e86bee4d..dd169e50 100644
     #[test]
     fn test_single_match() {
         assert_eq!(
-            only_contains_matching_lines(
+            match_helper(
                 &test_hunk(),
                 &vec!["bar".to_string(), "foot-date".to_string()]
             ),
@@ -98,7 +113,7 @@ index e86bee4d..dd169e50 100644
     #[test]
     fn test_detatched_no_match() {
         assert_eq!(
-            only_contains_matching_lines(
+            match_helper(
                 &test_detatched_hunk(),
                 &vec!["bar".to_string(), "foot-date".to_string()]
             ),
@@ -109,11 +124,15 @@ index e86bee4d..dd169e50 100644
     #[test]
     fn test_detatched_match() {
         assert_eq!(
-            only_contains_matching_lines(
+            match_helper(
                 &test_detatched_hunk(),
                 &vec!["bar".to_string(), "foo".to_string()]
             ),
             true
         );
+    }
+
+    fn match_helper(hunk: &patch::Hunk, patterns: &Vec<String>) -> bool {
+        only_contains_matching_lines(hunk, &regex_matcher::RegexMatcher::new(patterns).unwrap())
     }
 }
