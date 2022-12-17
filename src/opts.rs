@@ -1,7 +1,7 @@
 extern crate clap;
 
 #[derive(clap::Clap)]
-#[clap(version = "0.1.0", author = "Keith Smiley <keithbsmiley@gmail.com>")]
+#[clap(version = "0.2.0", author = "Keith Smiley <keithbsmiley@gmail.com>")]
 pub struct Opts {
     /// The input file path containing the patch to grep, defaults to stdin
     #[clap(short, long, default_value = "-")]
