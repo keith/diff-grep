@@ -5,26 +5,28 @@ mod io;
 mod matcher;
 mod opts;
 
+fn print_error_and_exit(msg: String) -> ! {
+    eprintln!("error: {}", msg);
+    std::process::exit(1);
+}
+
 fn main() {
     let options = opts::Opts::parse();
     let diff_str = match io::read(&options.input) {
         Ok(string) => string,
         Err(err) => {
-            eprintln!("error: {}", err);
-            std::process::exit(1)
+            print_error_and_exit(err);
         }
     };
 
     let patches = patch::Patch::from_multiple(&diff_str).unwrap_or_else(|_| {
-        eprintln!("error: failed to parse diff from {}", &options.input);
-        std::process::exit(1)
+        print_error_and_exit(format!("failed to parse diff from {}", &options.input));
     });
 
     let matcher = match matcher::regex_matcher::RegexMatcher::new(&options.patterns) {
         Ok(matcher) => matcher,
         Err(err) => {
-            eprintln!("error: {}", err);
-            std::process::exit(1)
+            print_error_and_exit(err);
         }
     };
 
@@ -47,11 +49,7 @@ fn main() {
         }
     }
 
-    std::process::exit(match io::write(options.output, files) {
-        Ok(_) => 0,
-        Err(err) => {
-            eprintln!("error: {}", err);
-            1
-        }
-    });
+    if let Err(err) = io::write(options.output, files) {
+        print_error_and_exit(err);
+    }
 }
