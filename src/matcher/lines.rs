@@ -72,64 +72,46 @@ index e86bee4d..dd169e50 100644
 
     #[test]
     fn test_no_match() {
-        assert_eq!(match_helper(&test_hunk(), &vec!["bar".to_string()]), false);
+        assert!(!match_helper(&test_hunk(), &vec!["bar".to_string()]));
     }
 
     #[test]
     fn test_match() {
-        assert_eq!(
-            match_helper(&test_hunk(), &vec!["foot-date".to_string()]),
-            true
-        );
+        assert!(match_helper(&test_hunk(), &vec!["foot-date".to_string()]));
     }
 
     #[test]
     fn test_regex_match() {
-        assert_eq!(
-            match_helper(&test_hunk(), &vec!["f[o]+t-date".to_string()]),
-            true
-        );
+        assert!(match_helper(&test_hunk(), &vec!["f[o]+t-date".to_string()]));
     }
 
     #[test]
     fn test_entire_regex_match() {
-        assert_eq!(
-            match_helper(&test_hunk(), &vec![r"[\w-]+".to_string()]),
-            true
-        );
+        assert!(match_helper(&test_hunk(), &vec![r"[\w-]+".to_string()]));
     }
 
     #[test]
     fn test_single_match() {
-        assert_eq!(
-            match_helper(
-                &test_hunk(),
-                &vec!["bar".to_string(), "foot-date".to_string()]
-            ),
-            true
-        );
+        assert!(match_helper(
+            &test_hunk(),
+            &vec!["bar".to_string(), "foot-date".to_string()]
+        ));
     }
 
     #[test]
     fn test_detatched_no_match() {
-        assert_eq!(
-            match_helper(
-                &test_detatched_hunk(),
-                &vec!["bar".to_string(), "foot-date".to_string()]
-            ),
-            false
-        );
+        assert!(!match_helper(
+            &test_detatched_hunk(),
+            &vec!["bar".to_string(), "foot-date".to_string()]
+        ));
     }
 
     #[test]
     fn test_detatched_match() {
-        assert_eq!(
-            match_helper(
-                &test_detatched_hunk(),
-                &vec!["bar".to_string(), "foo".to_string()]
-            ),
-            true
-        );
+        assert!(match_helper(
+            &test_detatched_hunk(),
+            &vec!["bar".to_string(), "foo".to_string()]
+        ));
     }
 
     fn match_helper(hunk: &patch::Hunk, patterns: &Vec<String>) -> bool {
