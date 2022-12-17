@@ -27,7 +27,7 @@ pub fn write<T: std::fmt::Display>(path: String, files: Vec<T>) -> Result<(), St
     };
 
     for patch in files {
-        write!(handle, "{}\n", patch).map_err(|_| format!("failed to write to {}", path))?;
+        writeln!(handle, "{}", patch).map_err(|_| format!("failed to write to {}", path))?;
     }
 
     Ok(())
