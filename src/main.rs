@@ -30,12 +30,14 @@ fn main() {
         }
     };
 
+    let invert = options.invert_match;
     let mut files: Vec<patch::Patch> = vec![];
     for patched_file in patches {
         let mut hunks_per_file = vec![];
         for hunk in patched_file.hunks {
-            if matcher::lines::only_contains_matching_lines(&hunk, &matcher) {
-                hunks_per_file.push(hunk)
+            let matches = matcher::lines::only_contains_matching_lines(&hunk, &matcher);
+            if (matches && !invert) || (invert && !matches) {
+                hunks_per_file.push(hunk);
             }
         }
 

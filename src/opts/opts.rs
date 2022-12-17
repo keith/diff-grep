@@ -12,6 +12,9 @@ pub struct Opts {
     /// The literal patterns to match against
     #[clap(required = true)]
     pub patterns: Vec<String>,
+    /// Select lines that do not match any of the patterns
+    #[clap(short = 'v', long)]
+    pub invert_match: bool,
 }
 
 impl Opts {
