@@ -1,8 +1,8 @@
 extern crate patch;
 
-use super::matcher;
+use super::Matcher;
 
-pub fn only_contains_matching_lines(hunk: &patch::Hunk, matcher: &dyn matcher::Matcher) -> bool {
+pub fn only_contains_matching_lines(hunk: &patch::Hunk, matcher: &dyn Matcher) -> bool {
     for line in &hunk.lines {
         match line {
             patch::Line::Add(text) | patch::Line::Remove(text) => {

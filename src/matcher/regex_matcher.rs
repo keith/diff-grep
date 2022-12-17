@@ -1,4 +1,4 @@
-use super::matcher;
+use super::Matcher;
 
 pub struct RegexMatcher {
     regexes: regex::RegexSet,
@@ -15,7 +15,7 @@ impl RegexMatcher {
     }
 }
 
-impl matcher::Matcher for RegexMatcher {
+impl Matcher for RegexMatcher {
     fn matches(&self, line: String) -> bool {
         self.regexes.is_match(line.as_str())
     }
