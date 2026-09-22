@@ -69,8 +69,16 @@ $ git apply --reverse /tmp/filtered.diff
 ```
 
 In this example, we revert only the matching hunk using `git apply
---reverse`. This can be useful when you want to stage, or checkout,
-large mechanical diffs that you have intertwined other changes with.
+--reverse`.
+
+You can also stage only the matching hunk using `git apply --cached`:
+
+```sh
+$ git apply --cached /tmp/filtered.diff
+```
+
+This can be useful when you want to stage, or checkout, large mechanical
+diffs that you have intertwined other changes with.
 
 ## Installation
 
