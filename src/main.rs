@@ -20,7 +20,7 @@ fn main() {
     };
 
     let patches = patch::Patch::from_multiple(&diff_str).unwrap_or_else(|_| {
-        print_error_and_exit(format!("failed to parse diff from {}", &options.input));
+        print_error_and_exit(format!("failed to parse diff from {}", options.input));
     });
 
     let matcher = match matcher::regex_matcher::RegexMatcher::new(&options.patterns) {
