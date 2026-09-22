@@ -10,6 +10,12 @@ if [[ -z "$toolchain" ]] || ! command -v rustup >/dev/null; then
     exit 1
 fi
 
-cargo +"$toolchain" fmt --all -- --check
-cargo +"$toolchain" test --locked
-cargo +"$toolchain" clippy --locked --all-targets --all-features -- -D warnings
+if [[ $(cargo --version) != "cargo $toolchain "* ]] ||
+   [[ $(rustc --version) != "rustc $toolchain "* ]]; then
+    echo "check.sh requires Cargo and rustc from Rust $toolchain" >&2
+    exit 1
+fi
+
+cargo fmt --all -- --check
+cargo test --locked
+cargo clippy --locked --all-targets --all-features -- -D warnings
