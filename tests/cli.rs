@@ -66,6 +66,41 @@ fn filters_hunks_from_stdin() {
 }
 
 #[test]
+fn ignores_blank_changes_when_matching() {
+    let diff = r#"--- a/BUILD.bazel
++++ b/BUILD.bazel
+@@ -1,2 +1,3 @@
+-
++load("@rules_cc//cc:cc_binary.bzl", "cc_binary")
++
+ cc_binary(
+"#;
+    let output = run(&["cc_binary"], diff);
+    assert!(output.status.success(), "{:?}", output);
+    assert_eq!(String::from_utf8(output.stdout).unwrap(), diff);
+
+    let output = run(&["missing"], diff);
+    assert!(output.status.success(), "{:?}", output);
+    assert!(output.stdout.is_empty());
+
+    let output = run(&["-v", "cc_binary"], diff);
+    assert!(output.status.success(), "{:?}", output);
+    assert!(output.stdout.is_empty());
+
+    for whitespace in [" ", "\t"] {
+        for marker in ["+", "-"] {
+            let diff = diff.replace(
+                &format!("\n{marker}\n"),
+                &format!("\n{marker}{whitespace}\n"),
+            );
+            let output = run(&["cc_binary"], &diff);
+            assert!(output.status.success(), "{:?}", output);
+            assert_eq!(String::from_utf8(output.stdout).unwrap(), diff);
+        }
+    }
+}
+
+#[test]
 fn supports_file_paths_and_inverted_matches() {
     let dir = std::env::temp_dir().join(format!(
         "diff-grep-cli-{}-{}",
