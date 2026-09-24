@@ -88,7 +88,13 @@ diffs that you have intertwined other changes with.
 brew install keith/formulae/diff-grep
 ```
 
-Manually, after [installing rust](https://rustup.rs/):
+With Cargo:
+
+```sh
+cargo install --locked --git https://github.com/keith/diff-grep
+```
+
+Or from a local checkout:
 
 ```sh
 cargo install --locked --path .
