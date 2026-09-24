@@ -6,7 +6,7 @@ pub fn only_contains_matching_lines(hunk: &patch::Hunk, matcher: &dyn Matcher) -
     for line in &hunk.lines {
         match line {
             patch::Line::Add(text) | patch::Line::Remove(text) => {
-                if !matcher.matches(text.to_string()) {
+                if !text.trim().is_empty() && !matcher.matches(text.to_string()) {
                     return false;
                 }
             }
